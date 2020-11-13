@@ -1,6 +1,14 @@
-$(function () {
+$(function() {
+    // data-uic-background-color:transparent(default)
+    // data-uic-remove-content:false(default)
+    // data-uic-remove-element:false(default)
+    // data-uic-display-height:400(default)
+    // data-uic-target-height: auto(default)
+    // data-uic-display-width:400(default)
+    // data-uic-target-width: auto(default)
+
     uploadImageCopper = {
-        init: function () {
+        init: function() {
             var self = this;
             var ele = `<div class="image-cropper-wrapper">
                     <div class="image-cropper">
@@ -15,7 +23,7 @@ $(function () {
             this.$body = $("body");
             this.$body.append(ele);
 
-            this.$body.on("change", ".upload-image-copper", function () {
+            this.$body.on("change", ".upload-image-copper", function() {
                 var $this = $(this);
                 var $wrapper = $this.parent().parent();
 
@@ -33,7 +41,7 @@ $(function () {
 
                 var tWidth = $this.attr("data-uic-target-width") || "auto";
                 var tHeight = $this.attr("data-uic-target-height") || "auto";
-                var mimeType = $this.attr("data-uic-mime-type") || "jpeg";
+                var mimeType = this.files[0].type;
                 var backgroundColor =
                     $this.attr("data-uic-background-color") || "transparent";
 
@@ -51,7 +59,7 @@ $(function () {
                     tHeight,
                     backgroundColor,
                     mimeType
-                ).then(function (res) {
+                ).then(function(res) {
                     /* var img = document.createElement("img"); */
                     /*  img.className = "img-fluid cropit-preview-image"; */
 
@@ -66,8 +74,10 @@ $(function () {
                 });
             });
 
-            this.$body.on("click", ".crop-upload", function () {
-                var $file = $(this).parent().find(".upload-image-copper");
+            this.$body.on("click", ".crop-upload", function() {
+                var $file = $(this)
+                    .parent()
+                    .find(".upload-image-copper");
                 var $wrapper = $(".image-cropper-wrapper");
                 var that = $file.get(0);
 
@@ -78,16 +88,18 @@ $(function () {
                     .val();
                 var $img = $wrapper.find("img");
 
-                $img.get(0).onload = function () {
-                    self.setupCropper(that);
+                $img.get(0).onload = function() {
+                    self.setupCropper(that, mimeType);
                     $wrapper.show();
                 };
                 $img.attr("src", src);
                 return false;
             });
 
-            this.$body.on("click", ".uic-remove", function () {
-                var $wrapper = $(this).parent().parent();
+            this.$body.on("click", ".uic-remove", function() {
+                var $wrapper = $(this)
+                    .parent()
+                    .parent();
                 var $upload = $wrapper.find(".upload-image-copper");
                 var removeElement =
                     $upload.attr("data-uic-remove-element") || false;
@@ -119,7 +131,7 @@ $(function () {
             this.update();
         },
 
-        setupCropper: function (file) {
+        setupCropper: function(file, mimeType) {
             var self = this;
             var $button = $("#cropper-button");
             var $cancel = $("#uic-cancel");
@@ -130,7 +142,6 @@ $(function () {
                 parseInt($file.attr("data-uic-target-height")) || "auto";
             var backgroundColor =
                 $file.attr("data-uic-background-color") || "transparent";
-            var mimeType = $file.attr("data-uic-mime-type") || "jpeg";
 
             var upload_image_preview = document.querySelector(
                 "#upload_image_preview"
@@ -140,21 +151,21 @@ $(function () {
 
             var cropper = new Cropper(upload_image_preview, {
                 aspectRatio: tWidth / tHeight,
-                ready: function (event) {
+                ready: function(event) {
                     // Zoom the image to its natural size
                     cropper.zoomTo(0.5);
-                },
+                }
             });
 
-            $cancel.off().one("click", function () {
+            $cancel.off().one("click", function() {
                 $("#upload_image_preview").removeAttr("src");
                 $(".image-cropper-wrapper").hide();
                 cropper.destroy();
             });
 
-            $button.off().one("click", function () {
+            $button.off().one("click", function() {
                 var canvas = cropper.getCroppedCanvas();
-                var data = canvas.toDataURL("image/png", 1);
+                var data = canvas.toDataURL(mimeType, 1);
 
                 if (tWidth === "auto") {
                     tWidth = (canvas.width / canvas.height) * tHeight;
@@ -170,7 +181,7 @@ $(function () {
                     tHeight,
                     backgroundColor,
                     mimeType
-                ).then(function (res) {
+                ).then(function(res) {
                     /*  var img = document.createElement("img");
                     img.className = "img-fluid cropit-preview-image"; */
 
@@ -187,16 +198,16 @@ $(function () {
             });
         },
 
-        update: function () {
+        update: function() {
             var self = this;
-            $(".upload-image-copper").each(function () {
+            $(".upload-image-copper").each(function() {
                 var $this = $(this);
                 if ($this.hasClass("is-upload-image-copper")) return true;
                 self.wrapper($this);
             });
         },
 
-        wrapper: function ($element) {
+        wrapper: function($element) {
             var name = $element.attr("name");
             var path = $element.attr("data-uic-path") || "";
             var dWidth = $element.attr("data-uic-display-width") || 400;
@@ -255,17 +266,17 @@ $(function () {
             }
         },
 
-        resizeImage: function (
+        resizeImage: function(
             base64Str,
             width,
             height,
             backgroundColor = "transparent",
-            mimeType = "jpeg"
+            mimeType
         ) {
-            return new Promise(function (resolve) {
+            return new Promise(function(resolve) {
                 var img = new Image();
                 img.src = base64Str;
-                img.onload = function () {
+                img.onload = function() {
                     var canvas = document.createElement("canvas");
 
                     if (width === "auto") {
@@ -282,10 +293,10 @@ $(function () {
                     ctx.fillStyle = backgroundColor;
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
                     ctx.drawImage(img, 0, 0, width, height);
-                    resolve(canvas.toDataURL(`image/${mimeType}`, 0.9));
+                    resolve(canvas.toDataURL(mimeType, 0.9));
                 };
             });
-        },
+        }
     };
     uploadImageCopper.init();
 });
