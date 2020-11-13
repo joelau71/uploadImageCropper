@@ -115,6 +115,14 @@ label.error {
     z-index: 5;
 }
 
+.upload-image-copper-wrapper.has-data .uic-remove {
+    right: 0px;
+}
+
+.upload-image-copper-wrapper.has-data.has-upload .uic-remove {
+    right: 20px;
+}
+
 .upload-image-copper-wrapper.has-upload .uic-remove,
 .upload-image-copper-wrapper.has-data .uic-remove {
     display: block;
