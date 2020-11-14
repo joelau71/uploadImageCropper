@@ -214,6 +214,7 @@ $(function() {
             var dHeight = $element.attr("data-uic-display-height") || 400;
             var title = $element.attr("data-uic-title") || "";
             var remove = $element.attr("data-uic-remove-content") || false;
+            var del = $element.attr("data-uic-remove-element") || false;
 
             var hasData = path ? "has-data" : "";
 
@@ -261,7 +262,7 @@ $(function() {
                 `<input type="hidden" class="uic-original-upload" name="uic_original_upload" />`
             );
             $label.append("<div class='crop-upload'></div>");
-            if (remove) {
+            if (remove || del) {
                 $label.append("<div class='uic-remove'></div>");
             }
         },
