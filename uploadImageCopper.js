@@ -41,11 +41,12 @@ $(function() {
                 var tWidth = $this.attr("data-uic-target-width") || "auto";
                 var tHeight = $this.attr("data-uic-target-height") || "auto";
                 var mimeType = this.files[0].type;
-                console.log(mimeType);
                 var backgroundColor =
                     $this.attr("data-uic-background-color") || "transparent";
 
                 var base64 = URL.createObjectURL(this.files[0]);
+
+                $wrapper.find(".uic-mime-type").val(mimeType);
 
                 $this
                     .parent()
@@ -76,7 +77,7 @@ $(function() {
 
                 var $wrapper = $(".image-cropper-wrapper");
                 var that = $file.get(0);
-                var mimeType = that.files[0].type;
+                var mimeType = $wrapper.find(".uic-mime-type").val();
 
                 var src = $file
                     .parent()
@@ -241,6 +242,9 @@ $(function() {
             );
             $wrapper.append(
                 `<input type="hidden" class="uic-state" name="uic_state_${name}" value="static" />`
+            );
+            $wrapper.append(
+                `<input type="hidden" class="uic-mime-type" name="uic_mime_type_${name}" />`
             );
             $wrapper.append(
                 `<input type="hidden" class="uic-original-upload" name="uic_original_upload" />`
