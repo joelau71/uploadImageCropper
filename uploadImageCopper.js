@@ -202,6 +202,11 @@ $(function() {
             var title = $element.attr("data-uic-title") || "";
             var remove = $element.attr("data-uic-remove") || false;
             var hasData = path ? "has-data" : "";
+            var file = "";
+
+            if (path) {
+                file = path.split("/").pop();
+            }
 
             $element.addClass("is-upload-image-copper");
             $element.wrap(`<label class="uic-label-wrapper"></label>`);
@@ -246,9 +251,15 @@ $(function() {
             $wrapper.append(
                 `<input type="hidden" class="uic-mime-type" name="uic_mime_type_${name}" />`
             );
-            $wrapper.append(
-                `<input type="hidden" class="uic-original-upload" name="uic_original_upload" />`
-            );
+            if (path) {
+                $wrapper.append(
+                    `<input type="hidden" class="uic-original-upload" name="uic_original_upload" value="${file}" />`
+                );
+            } else {
+                $wrapper.append(
+                    `<input type="hidden" class="uic-original-upload" name="uic_original_upload" />`
+                );
+            }
             $label.append("<div class='crop-upload'></div>");
             if (remove) {
                 $label.append("<div class='uic-remove'></div>");
