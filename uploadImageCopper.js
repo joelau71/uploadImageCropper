@@ -1,14 +1,13 @@
-$(function() {
+$(function () {
     // data-uic-background-color:transparent(default)
-    // data-uic-remove-content:false(default)
-    // data-uic-remove-element:false(default)
+    // data-uic-remove:false(default)
     // data-uic-display-height:400(default)
     // data-uic-target-height: auto(default)
     // data-uic-display-width:400(default)
     // data-uic-target-width: auto(default)
 
     uploadImageCopper = {
-        init: function() {
+        init: function () {
             var self = this;
             var ele = `<div class="image-cropper-wrapper">
                     <div class="image-cropper">
@@ -23,7 +22,7 @@ $(function() {
             this.$body = $("body");
             this.$body.append(ele);
 
-            this.$body.on("change", ".upload-image-copper", function() {
+            this.$body.on("change", ".upload-image-copper", function () {
                 var $this = $(this);
                 var $wrapper = $this.parent().parent();
 
@@ -59,14 +58,9 @@ $(function() {
                     tHeight,
                     backgroundColor,
                     mimeType
-                ).then(function(res) {
-                    /* var img = document.createElement("img"); */
-                    /*  img.className = "img-fluid cropit-preview-image"; */
-
-                    /* img.src = res; */
+                ).then(function (res) {
                     $wrapper.addClass("has-upload");
                     $wrapper.find(".uic-preview-image").attr("src", res);
-                    /* $wrapper.find(".cropit-preview").empty().append(img); */
                     $wrapper.find(".uic-base64").val(res);
                     $wrapper.find(".uic-state").val("upload");
                     $("#upload_image_preview").removeAttr("src");
@@ -74,10 +68,8 @@ $(function() {
                 });
             });
 
-            this.$body.on("click", ".crop-upload", function() {
-                var $file = $(this)
-                    .parent()
-                    .find(".upload-image-copper");
+            this.$body.on("click", ".crop-upload", function () {
+                var $file = $(this).parent().find(".upload-image-copper");
                 var $wrapper = $(".image-cropper-wrapper");
                 var that = $file.get(0);
 
@@ -88,7 +80,7 @@ $(function() {
                     .val();
                 var $img = $wrapper.find("img");
 
-                $img.get(0).onload = function() {
+                $img.get(0).onload = function () {
                     self.setupCropper(that, mimeType);
                     $wrapper.show();
                 };
@@ -96,42 +88,34 @@ $(function() {
                 return false;
             });
 
-            this.$body.on("click", ".uic-remove", function() {
-                var $wrapper = $(this)
-                    .parent()
-                    .parent();
+            this.$body.on("click", ".uic-remove", function () {
+                var $wrapper = $(this).parent().parent();
                 var $upload = $wrapper.find(".upload-image-copper");
-                var removeElement =
-                    $upload.attr("data-uic-remove-element") || false;
-                if (removeElement) {
-                    $wrapper.remove();
-                } else {
-                    var dWidth = $upload.attr("data-uic-display-width");
-                    var dHeight =
-                        $upload.attr("data-uic-display-height") || "400";
-                    var title = $upload.attr("data-uic-title") || "";
 
-                    $wrapper
-                        .find(".uic-preview-image")
-                        .attr(
-                            "src",
-                            `https://via.placeholder.com/${dWidth}x${dHeight}.jpg?text=${title}`
-                        );
+                var dWidth = $upload.attr("data-uic-display-width");
+                var dHeight = $upload.attr("data-uic-display-height") || "400";
+                var title = $upload.attr("data-uic-title") || "";
 
-                    $upload.val("");
-                    $wrapper.removeClass("has-upload has-data");
-                    $wrapper.find(".cropit-preview").empty();
-                    $wrapper.find(".uic-base64").val("");
-                    $wrapper.find(".uic-state").val("remove");
-                    $("#upload_image_preview").removeAttr("src");
-                }
+                $wrapper
+                    .find(".uic-preview-image")
+                    .attr(
+                        "src",
+                        `https://via.placeholder.com/${dWidth}x${dHeight}.jpg?text=${title}`
+                    );
+
+                $upload.val("");
+                $wrapper.removeClass("has-upload has-data");
+                $wrapper.find(".cropit-preview").empty();
+                $wrapper.find(".uic-base64").val("");
+                $wrapper.find(".uic-state").val("remove");
+                $("#upload_image_preview").removeAttr("src");
                 return false;
             });
 
             this.update();
         },
 
-        setupCropper: function(file, mimeType) {
+        setupCropper: function (file, mimeType) {
             var self = this;
             var $button = $("#cropper-button");
             var $cancel = $("#uic-cancel");
@@ -151,19 +135,19 @@ $(function() {
 
             var cropper = new Cropper(upload_image_preview, {
                 aspectRatio: tWidth / tHeight,
-                ready: function(event) {
+                ready: function (event) {
                     // Zoom the image to its natural size
                     cropper.zoomTo(0.5);
-                }
+                },
             });
 
-            $cancel.off().one("click", function() {
+            $cancel.off().one("click", function () {
                 $("#upload_image_preview").removeAttr("src");
                 $(".image-cropper-wrapper").hide();
                 cropper.destroy();
             });
 
-            $button.off().one("click", function() {
+            $button.off().one("click", function () {
                 var canvas = cropper.getCroppedCanvas();
                 var data = canvas.toDataURL(mimeType, 1);
 
@@ -181,14 +165,9 @@ $(function() {
                     tHeight,
                     backgroundColor,
                     mimeType
-                ).then(function(res) {
-                    /*  var img = document.createElement("img");
-                    img.className = "img-fluid cropit-preview-image"; */
-
-                    /* img.src = res; */
+                ).then(function (res) {
                     $wrapper.addClass("has-upload");
                     $wrapper.find(".uic-preview-image").attr("src", res);
-                    /* $wrapper.find(".cropit-preview").empty().append(img); */
                     $wrapper.find(".uic-base64").val(res);
                     $wrapper.find(".uic-state").val("upload");
                     $("#upload_image_preview").removeAttr("src");
@@ -198,24 +177,22 @@ $(function() {
             });
         },
 
-        update: function() {
+        update: function () {
             var self = this;
-            $(".upload-image-copper").each(function() {
+            $(".upload-image-copper").each(function () {
                 var $this = $(this);
                 if ($this.hasClass("is-upload-image-copper")) return true;
                 self.wrapper($this);
             });
         },
 
-        wrapper: function($element) {
+        wrapper: function ($element) {
             var name = $element.attr("name");
             var path = $element.attr("data-uic-path") || "";
             var dWidth = $element.attr("data-uic-display-width") || 400;
             var dHeight = $element.attr("data-uic-display-height") || 400;
             var title = $element.attr("data-uic-title") || "";
-            var remove = $element.attr("data-uic-remove-content") || false;
-            var del = $element.attr("data-uic-remove-element") || false;
-
+            var remove = $element.attr("data-uic-remove") || false;
             var hasData = path ? "has-data" : "";
 
             $element.addClass("is-upload-image-copper");
@@ -262,22 +239,22 @@ $(function() {
                 `<input type="hidden" class="uic-original-upload" name="uic_original_upload" />`
             );
             $label.append("<div class='crop-upload'></div>");
-            if (remove || del) {
+            if (remove) {
                 $label.append("<div class='uic-remove'></div>");
             }
         },
 
-        resizeImage: function(
+        resizeImage: function (
             base64Str,
             width,
             height,
             backgroundColor = "transparent",
             mimeType
         ) {
-            return new Promise(function(resolve) {
+            return new Promise(function (resolve) {
                 var img = new Image();
                 img.src = base64Str;
-                img.onload = function() {
+                img.onload = function () {
                     var canvas = document.createElement("canvas");
 
                     if (width === "auto") {
@@ -297,7 +274,7 @@ $(function() {
                     resolve(canvas.toDataURL(mimeType, 0.9));
                 };
             });
-        }
+        },
     };
     uploadImageCopper.init();
 });
