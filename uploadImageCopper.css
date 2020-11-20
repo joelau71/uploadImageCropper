@@ -78,6 +78,7 @@ label.error {
 
 .upload-image-copper-wrapper .uic-label-wrapper img {
   max-width: 100%;
+  vertical-align: top;
 }
 
 .upload-image-copper-wrapper .is-upload-image-copper {
