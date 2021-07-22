@@ -151,4 +151,5 @@ label.error {
   background-color: #3490dc;
   border-color: #3490dc;
   margin: 1rem;
+  cursor:pointer;
 }
